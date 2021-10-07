@@ -4,10 +4,11 @@
 
 def bubblesort(unsortedlist):
     n = len(unsortedlist)
-    for i in range( n -1):
-        for j in range(0 , n - i -1):
-            if unsortedlist[j] > unsortedlist[ j +1]:
-                unsortedlist[j] ,unsortedlist[ j +1 ] =unsortedlist[ j +1] ,unsortedlist[j]
+    for i in range(n - 1):
+        for j in range(0, n - i - 1):
+            if unsortedlist[j] > unsortedlist[j + 1]:
+                unsortedlist[j], unsortedlist[j + 1] = unsortedlist[j + 1], unsortedlist[j]
+
 
 def insertionsort(unsortedlist):
     for i in range(1, len(unsortedlist)):
@@ -17,6 +18,7 @@ def insertionsort(unsortedlist):
             unsortedlist[j + 1] = unsortedlist[j]
             j -= 1
         unsortedlist[j + 1] = key
+
 
 def selectionsort(unsortedlist):
     for i in range(len(unsortedlist)):
