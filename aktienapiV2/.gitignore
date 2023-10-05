@@ -1,2 +1,6 @@
 /.mxmake/
 /venv/
+*index
+*tmp
+*lock
+*fs
