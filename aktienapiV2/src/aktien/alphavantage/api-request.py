@@ -28,3 +28,18 @@ class Datenverarbeitung:
 
     def __init__(self):
         self.connection = DatabaseConction()
+
+    def set_aktien(self, aktien):
+        for aktie in aktien:
+            symbol = self.get_symbol(aktie)
+            if not self.connection.check_if_table_exists(symbol):
+                self.connection.create_table(symbol)
+            data = aktie['Monthly Time Series']
+            dates = data.keys()
+            for date in dates:
+                self.connection.execute(f"INSERT INTO {symbol} VALUES ('{date}', {data[date]['1. open']}, {data[date]['2. high']}, {data[date]['3. low']}, {data[date]['4. close']}, {data[date]['5. volume']})")
+            
+
+
+    def get_symbol(self,aktie):
+        return aktie['Meta Data']['2. Symbol']
