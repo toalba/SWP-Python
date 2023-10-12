@@ -30,11 +30,12 @@ setup(
     license='GPL 3.0',
     packages=find_packages('src'),
     package_dir={'': 'src'},
-    namespace_packages=['aktien'],
+    namespace_packages=['aktien.alphavantage'],
     include_package_data=True,
     zip_safe=False,
     install_requires=[
         'setuptools',
         'requests',
+        'psycopg2'
     ],
 )
