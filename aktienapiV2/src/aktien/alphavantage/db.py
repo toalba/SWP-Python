@@ -1,4 +1,6 @@
-import ZODB, ZODB.FileStorage
+import psycopg2
+
+# als verstaendnis unter den imports, fuers developtment verwenden wir psycopg2, production wird mit psycopg2-binary empfohlen
 
 
 class DatabaseConction:
@@ -7,13 +9,30 @@ class DatabaseConction:
         self.connection = self.connect()
 
     def connect(self):
-        storage = ZODB.FileStorage.FileStorage('var/db/mydata.fs')
-        db = ZODB.DB(storage)
-        connection = db.open()
-        return connection.root
+        return psycopg2.connect(
+            database="aktien",
+            host="localhost",
+            user="postgress",
+            password="",
+            port="5432"
+        )
     
-    def close(self):
-        self.connection._p_jar.close()
+    def create_table(self,symbol):
+        cursor = self.connection.cursor()
+        cursor.execute(f"CREATE TABLE {symbol} (date DATE PRIMARY KEY, open FLOAT, high FLOAT, low FLOAT, close FLOAT, volume INT)")
+        self.connection.commit()
+        self.connection.close()
 
+    def check_if_table_exists(self, symbol):
+        cursor = self.connection.cursor()
+        cursor.execute(f"SELECT EXISTS(SELECT * FROM information_schema.tables WHERE table_name='{symbol}')")
+        return cursor.fetchone()[0]
+    
+    def __enter__(self):
+        return self.connection.cursor()
+    
+    def __close__(self):
+        self.connection.commit()
+        self.connection.close()
 
-connection = DatabaseConction().connection['aktien']
+connection = DatabaseConction()

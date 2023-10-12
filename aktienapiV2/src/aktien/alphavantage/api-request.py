@@ -1,4 +1,5 @@
 import requests
+from aktien.alphavantage.db import DatabaseConction
 
 class Api_access:
 
@@ -26,5 +27,4 @@ class API_utility:
 class Datenverarbeitung:
 
     def __init__(self):
-        pass
-
+        self.connection = DatabaseConction()
