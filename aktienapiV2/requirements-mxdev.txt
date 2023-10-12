@@ -2,5 +2,7 @@
 # begin requirements from: requirements.txt
 
 requests
+psycopg2
+
 # end requirements from: requirements.txt
 ###############################################################################

@@ -20,7 +20,7 @@ class API_utility:
     def get_aktienbylist(self, symbol_list):
         aktien = []
         for symbol in symbol_list:
-            aktien.append(self.get_aktie(symbol))
+            aktien.append(self.api.get_monthly(symbol))
         return aktien
     
 
@@ -32,14 +32,23 @@ class Datenverarbeitung:
     def set_aktien(self, aktien):
         for aktie in aktien:
             symbol = self.get_symbol(aktie)
-            if not self.connection.check_if_table_exists(symbol):
+            if self.connection.check_if_table_exists(symbol):
                 self.connection.create_table(symbol)
             data = aktie['Monthly Time Series']
             dates = data.keys()
+            cursor = self.connection.connection.cursor()
             for date in dates:
-                self.connection.execute(f"INSERT INTO {symbol} VALUES ('{date}', {data[date]['1. open']}, {data[date]['2. high']}, {data[date]['3. low']}, {data[date]['4. close']}, {data[date]['5. volume']})")
+                cursor.execute(f"INSERT INTO {symbol} VALUES ('{date}', {data[date]['1. open']}, {data[date]['2. high']}, {data[date]['3. low']}, {data[date]['4. close']}, {data[date]['5. volume']})")
+            self.connection.connection.commit()
             
 
 
     def get_symbol(self,aktie):
         return aktie['Meta Data']['2. Symbol']
+    
+
+if __name__ == '__main__':
+    api = API_utility('demo')
+    aktien = api.get_aktienbylist(['IBM'])
+    datenverarbeitung = Datenverarbeitung()
+    datenverarbeitung.set_aktien(aktien)

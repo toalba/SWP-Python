@@ -12,8 +12,8 @@ class DatabaseConction:
         return psycopg2.connect(
             database="aktien",
             host="localhost",
-            user="postgress",
-            password="",
+            user="postgres",
+            password="wa22er!wasser",
             port="5432"
         )
     
@@ -28,6 +28,9 @@ class DatabaseConction:
         cursor.execute(f"SELECT EXISTS(SELECT * FROM information_schema.tables WHERE table_name='{symbol}')")
         return cursor.fetchone()[0]
     
+    def check_if_key_exits_in_table(self,symbol,key):
+        
+
     def __enter__(self):
         return self.connection.cursor()
     
