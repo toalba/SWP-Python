@@ -29,7 +29,9 @@ class DatabaseConction:
         return cursor.fetchone()[0]
     
     def check_if_key_exits_in_table(self,symbol,key):
-        
+        cursor = self.connection.cursor()
+        cursor.execute(f"SELECT EXISTS(SELECT * FROM {symbol} WHERE date='{key}')")
+        return cursor.fetchone()[0]
 
     def __enter__(self):
         return self.connection.cursor()
