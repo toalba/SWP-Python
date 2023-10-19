@@ -10,10 +10,10 @@ class DatabaseConction:
 
     def connect(self):
         return psycopg2.connect(
-            database="aktien",
-            host="localhost",
-            user="postgres",
-            password="wa22er!wasser",
+            database="",
+            host="",
+            user="",
+            password="",
             port="5432"
         )
     
