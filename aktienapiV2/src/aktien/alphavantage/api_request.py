@@ -37,18 +37,14 @@ class Datenverarbeitung:
             data = aktie['Monthly Time Series']
             dates = data.keys()
             cursor = self.connection.connection.cursor()
+            update_count = 0
             for date in dates:
-                cursor.execute(f"INSERT INTO {symbol} VALUES ('{date}', {data[date]['1. open']}, {data[date]['2. high']}, {data[date]['3. low']}, {data[date]['4. close']}, {data[date]['5. volume']})")
+                if self.connection.check_if_key_exits_in_table(symbol, date):
+                    continue
+                res = cursor.execute(f"INSERT INTO {symbol} VALUES ('{date}', {data[date]['1. open']}, {data[date]['2. high']}, {data[date]['3. low']}, {data[date]['4. close']}, {data[date]['5. volume']})")
+                update_count+1
+            print(f'New Entries: {update_count}')
             self.connection.connection.commit()
-            
-
 
     def get_symbol(self,aktie):
         return aktie['Meta Data']['2. Symbol']
-    
-
-if __name__ == '__main__':
-    api = API_utility('demo')
-    aktien = api.get_aktienbylist(['IBM'])
-    datenverarbeitung = Datenverarbeitung()
-    datenverarbeitung.set_aktien(aktien)

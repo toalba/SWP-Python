@@ -1,7 +1,6 @@
 import psycopg2
-
+from aktien.alphavantage.config import db_conf
 # als verstaendnis unter den imports, fuers developtment verwenden wir psycopg2, production wird mit psycopg2-binary empfohlen
-
 
 class DatabaseConction:
 
@@ -9,12 +8,13 @@ class DatabaseConction:
         self.connection = self.connect()
 
     def connect(self):
+        
         return psycopg2.connect(
-            database="",
-            host="",
-            user="",
-            password="",
-            port="5432"
+            database=db_conf['database'],
+            host=db_conf['host'],
+            user=db_conf['user'],
+            password=db_conf['password'],
+            port=db_conf['port']
         )
     
     def create_table(self,symbol):
