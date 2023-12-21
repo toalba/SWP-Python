@@ -20,6 +20,7 @@ class API_utility:
     def get_aktienbylist(self, symbol_list):
         aktien = []
         for symbol in symbol_list:
+            print(symbol)
             aktien.append(self.api.get_monthly(symbol))
         return aktien
     
@@ -32,7 +33,7 @@ class Datenverarbeitung:
     def set_aktien(self, aktien):
         for aktie in aktien:
             symbol = self.get_symbol(aktie)
-            if self.connection.check_if_table_exists(symbol):
+            if not self.connection.check_if_table_exists(symbol):
                 self.connection.create_table(symbol)
             data = aktie['Monthly Time Series']
             dates = data.keys()
@@ -41,8 +42,11 @@ class Datenverarbeitung:
             for date in dates:
                 if self.connection.check_if_key_exits_in_table(symbol, date):
                     continue
-                res = cursor.execute(f"INSERT INTO {symbol} VALUES ('{date}', {data[date]['1. open']}, {data[date]['2. high']}, {data[date]['3. low']}, {data[date]['4. close']}, {data[date]['5. volume']})")
-                update_count+1
+                try:
+                    cursor.execute(f"INSERT INTO {symbol} VALUES ('{date}', {data[date]['1. open']}, {data[date]['2. high']}, {data[date]['3. low']}, {data[date]['4. close']}, {data[date]['5. volume']})")
+                    update_count+1
+                except:
+                    pass
             print(f'New Entries: {update_count}')
             self.connection.connection.commit()
 
